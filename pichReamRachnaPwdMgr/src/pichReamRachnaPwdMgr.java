@@ -7,6 +7,7 @@ public class pichReamRachnaPwdMgr{
         mainMenu();
     }
 
+    /** Main Menu **/
     public static void mainMenu() {
         // Display welcome message
         System.out.println("\n========= Welcome to Rachna's Password Manager =========");
@@ -24,13 +25,17 @@ public class pichReamRachnaPwdMgr{
                 break;
             }
         }
+        userPassword(name);
+    }
 
-        // Prompt user to enter their password
+
+    /** User's Password **/
+    public static void userPassword(String name) {
         while (true) {
-            System.out.printf("\n%s, Please enter your preferred password: ", name);
+            System.out.printf("\n%s, Please enter your password: ", name);
             String password = input.nextLine();
 
-            // Check if password is Valid
+            // Check if password is valid
             if (isValidPwd(password)) {
                 System.out.println("The password is valid.");
                 // If password is valid, direct user to mini menu
@@ -41,57 +46,65 @@ public class pichReamRachnaPwdMgr{
         }
     }
 
-    // Mini Menu
+    /** Mini Menu **/
     public static void miniMenu(String password, String name) {
         while (true) {
-            System.out.println("\nWhat would you like to do next?");
-            System.out.println("1. Display the password Strength\n" + "2. Exit the program");
+            System.out.printf("\n========= Welcome, %s! What would you like to do next? =========\n", name);
+            System.out.println("1. Display the password Strength\n" +
+                    "2. Check a new password\n" +
+                    "3. Exit the program");
             System.out.print("\nPlease enter your choice: ");
 
             String userChoice = input.nextLine();
 
+            // Check if input is empty
             if (userChoice.isEmpty()) {
                 System.out.println("Choice cannot be empty. Please enter your choice.");
                 continue;
             }
 
+            // Convert user's choice into an integer, if can't, throws and catch a number format exception
             int choice;
             try {
                 choice = Integer.parseInt(userChoice);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter 1 or 2.");
+                System.out.println("Invalid input. Please enter 1, 2, or 3.");
                 continue;
             }
 
-
+            // Handles user's mini menu choice
             switch (choice) {
                 case 1:
                     passwordStrength(password);
-                    return;
+                    continue;
                 case 2:
-                    System.out.printf("Exiting program... Goodbye, %s", name);
+                    userPassword(name);
+                case 3:
+                    System.out.printf("\nExiting program... Goodbye, %s", name);
                     System.exit(0);
                 default:
-                    System.out.println("Invalid choice. Please enter 1 or 2.");
+                    System.out.println("Invalid choice. Please enter 1,2, or 3.");
             }
         }
-
     }
 
+    /** Validate password **/
     public static boolean isValidPwd(String password) {
         boolean isValid = true;
 
+        // Ensure that password is 8 chars long.
         if (password.length() < 8) {
             System.out.println("Password must be at least 8 characters long.");
             isValid = false;
         }
 
+        // Ensure that password contain an uppercase, a digit, and a special character
         boolean hasUppercase = false;
         boolean hasDigit = false;
         boolean hasSpecialChar = false;
-
-        String specialChars = "@#$%&";
-
+        
+        String specialChars = "! @ # $ % ^ & * ( ) _ - + = { } | \\ : ; \" ' < > , . / ?";
+        
         for (char c : password.toCharArray()) {
             if (Character.isUpperCase(c)) {
                 hasUppercase = true;
@@ -102,16 +115,17 @@ public class pichReamRachnaPwdMgr{
             }
         }
 
+        // When a condition is false, print the correct error messages according to that condition
         if (!hasUppercase) {
-            System.out.println("Password must contain at least one uppercase letter.");
+            System.out.println(" *Password must contain at least one uppercase letter.");
             isValid = false;
         }
         if (!hasDigit) {
-            System.out.println("Password must contain at least one digit.");
+            System.out.println(" *Password must contain at least one digit.");
             isValid = false;
         }
         if (!hasSpecialChar) {
-            System.out.println("Password must contain at least one special character (E.g., @, #, $, %, &).");
+            System.out.println(" *Password must contain at least one special character (E.g., ! @ # $ % ^ & * ( ) _ - + = { } | \\\\ : ; \\\" ' < > , . / ?)");
             isValid = false;
         }
 
@@ -119,15 +133,14 @@ public class pichReamRachnaPwdMgr{
 
     }
 
+    /** Determine Password Strength **/
     public static void passwordStrength(String password) {
-        // Determine password strength
-
         if (password.length() < 10) {
-            System.out.println("The password Strength : WEAK");
+            System.out.println("The password strength : WEAK");
         } else if (password.length() <= 12) {
-            System.out.println("The password Strength : MEDIUM");
+            System.out.println("The password strength : MEDIUM");
         } else {
-            System.out.println("The password Strength : STRONG");
+            System.out.println("The password strength : STRONG");
         }
     }
 
